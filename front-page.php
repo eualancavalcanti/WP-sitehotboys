@@ -42,8 +42,8 @@ $seo_title = get_theme_mod( 'hotboys_seo_title', 'HotBoys - Catálogo de Cenas E
             <h1 class="hero__title"><?php echo esc_html( $seo_title ); ?></h1>
             <p class="hero__subtitle"><?php echo esc_html( get_bloginfo( 'description' ) ); ?></p>
             <div class="hero__actions">
-                <a href="<?php echo esc_url( get_post_type_archive_link( 'scene' ) ); ?>" class="btn btn-primary btn-large">Ver Todas as Cenas</a>
-                <a href="<?php echo esc_url( get_post_type_archive_link( 'actor' ) ); ?>" class="btn btn-outline btn-large">Nossos Atores</a>
+                <a href="<?php echo esc_url( get_post_type_archive_link( 'scene' ) ); ?>" class="btn btn-primary btn-large">🔥 Explorar Cenas</a>
+                <a href="<?php echo esc_url( get_post_type_archive_link( 'actor' ) ); ?>" class="btn btn-outline btn-large">⭐ Nossos Atores</a>
             </div>
         </div>
     </section>
