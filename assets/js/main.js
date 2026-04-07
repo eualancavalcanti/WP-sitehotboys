@@ -1,6 +1,5 @@
 /**
  * HotBoys Theme - JavaScript Principal
- * Minimal: apenas menu mobile e aviso de maioridade
  */
 
 (function () {
@@ -18,8 +17,70 @@
         });
     }
 
+    // Promo Bar dismiss
+    var promoBar = document.getElementById('promoBar');
+    var promoClose = document.getElementById('promoClose');
+    if (promoBar && promoClose) {
+        if (sessionStorage.getItem('hotboys_promo_closed')) {
+            promoBar.classList.add('is-hidden');
+        }
+        promoClose.addEventListener('click', function () {
+            promoBar.classList.add('is-hidden');
+            sessionStorage.setItem('hotboys_promo_closed', '1');
+        });
+    }
+
+    // Horizontal scroll rows — drag to scroll
+    var scrollRows = document.querySelectorAll('[data-scroll-row]');
+    for (var i = 0; i < scrollRows.length; i++) {
+        (function (row) {
+            var isDown = false;
+            var startX, scrollLeft;
+
+            row.addEventListener('mousedown', function (e) {
+                isDown = true;
+                row.style.cursor = 'grabbing';
+                startX = e.pageX - row.offsetLeft;
+                scrollLeft = row.scrollLeft;
+            });
+
+            row.addEventListener('mouseleave', function () {
+                isDown = false;
+                row.style.cursor = '';
+            });
+
+            row.addEventListener('mouseup', function () {
+                isDown = false;
+                row.style.cursor = '';
+            });
+
+            row.addEventListener('mousemove', function (e) {
+                if (!isDown) return;
+                e.preventDefault();
+                var x = e.pageX - row.offsetLeft;
+                var walk = (x - startX) * 1.5;
+                row.scrollLeft = scrollLeft - walk;
+            });
+        })(scrollRows[i]);
+    }
+
+    // Newsletter form — basic handler (prevent reload, show feedback)
+    var nlForm = document.querySelector('[data-newsletter-form]');
+    if (nlForm) {
+        nlForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var btn = nlForm.querySelector('.newsletter-form__btn');
+            var input = nlForm.querySelector('.newsletter-form__input');
+            if (btn && input && input.value) {
+                btn.textContent = '✓ Cadastrado!';
+                btn.disabled = true;
+                input.disabled = true;
+                btn.style.opacity = '0.7';
+            }
+        });
+    }
+
     // Age Gate (aviso de maioridade)
-    // NAO bloqueia o HTML para crawlers do Google - renderizado via JS
     if (!sessionStorage.getItem('hotboys_age_verified')) {
         var overlay = document.createElement('div');
         overlay.className = 'age-gate';

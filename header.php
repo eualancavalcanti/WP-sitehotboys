@@ -19,10 +19,17 @@
     .site-header{background:var(--color-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.05)}
     .header-inner{display:flex;align-items:center;justify-content:space-between;height:var(--header-height)}
     .site-title{color:var(--color-primary);font-size:1.25rem;font-weight:700;text-decoration:none}
-    .hero{padding:4rem 0;text-align:center;background:linear-gradient(180deg,var(--color-surface) 0%,var(--color-bg) 100%)}
+    .promo-bar{background:linear-gradient(90deg,#e50914 0%,#ff6b35 100%);color:#fff;padding:.625rem 0;text-align:center;font-size:.875rem;position:relative;z-index:99}
+    .promo-bar .container{display:flex;align-items:center;justify-content:center;gap:1rem}
+    .promo-bar.is-hidden{display:none}
+    .hero--home{padding:3rem 0 2.5rem;text-align:center;background:linear-gradient(180deg,var(--color-surface) 0%,var(--color-bg) 100%)}
     .hero__title{font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:.5rem}
+    .hero__stats{display:flex;gap:2rem;justify-content:center;margin:2rem 0}
+    .hero__stat-number{font-size:2rem;font-weight:800;color:#ff4444;line-height:1.2}
+    .hero__stat-label{font-size:.75rem;color:#a0a0a0;text-transform:uppercase;letter-spacing:1px}
     .btn{display:inline-flex;padding:.75rem 1.5rem;border-radius:.5rem;text-decoration:none;font-weight:600;transition:.2s}
     .btn-primary{background:var(--color-primary);color:#fff}
+    .btn-accent{background:linear-gradient(135deg,#e50914 0%,#ff6b35 100%);color:#fff}
     .screen-reader-text{clip:rect(1px,1px,1px,1px);clip-path:inset(50%);position:absolute;overflow:hidden;width:1px;height:1px;margin:-1px;padding:0;border:0;word-wrap:normal!important}
     </style>
     <?php wp_head(); ?>

@@ -530,7 +530,11 @@ function hotboys_schema_faq() {
     $faqs = array(
         array(
             'q' => 'O que é o HotBoys?',
-            'a' => 'HotBoys é uma das maiores produtoras de conteúdo adulto do Brasil, com um catálogo exclusivo de cenas e atores profissionais.',
+            'a' => 'HotBoys é uma das maiores produtoras de conteúdo adulto gay do Brasil, com mais de 690 cenas exclusivas e 217+ atores profissionais. Todo o conteúdo é produzido com qualidade HD e 4K.',
+        ),
+        array(
+            'q' => 'Quanto custa a assinatura?',
+            'a' => 'Oferecemos planos flexíveis: Trial de 2 dias por R$ 1,00, Mensal por R$ 38,90, ou Anual por R$ 249,90 (economia de 47%). Todos incluem acesso ilimitado ao catálogo completo.',
         ),
         array(
             'q' => 'Como assistir as cenas exclusivas?',
@@ -541,12 +545,16 @@ function hotboys_schema_faq() {
             'a' => 'Sim, a maioria das cenas está disponível em alta definição (HD) e muitas também em qualidade 4K para a melhor experiência.',
         ),
         array(
-            'q' => 'Como encontrar um ator específico?',
-            'a' => 'Use a página de Atores para explorar perfis completos com filmografia, ou utilize a busca no topo do site para encontrar atores por nome.',
+            'q' => 'A cobrança é discreta?',
+            'a' => 'Sim! Na fatura do cartão aparece um nome genérico, sem referência ao site. Sua privacidade é nossa prioridade.',
         ),
         array(
-            'q' => 'O conteúdo é atualizado com frequência?',
-            'a' => 'Sim, novas cenas são adicionadas regularmente ao catálogo com atores exclusivos e produções de alta qualidade.',
+            'q' => 'Posso cancelar a qualquer momento?',
+            'a' => 'Sim, não existe fidelidade. Você pode cancelar sua assinatura quando quiser, sem burocracia.',
+        ),
+        array(
+            'q' => 'Como encontrar um ator específico?',
+            'a' => 'Use a página de Atores para explorar perfis completos com filmografia, ou utilize a busca no topo do site para encontrar atores por nome.',
         ),
     );
 
