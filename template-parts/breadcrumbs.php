@@ -20,6 +20,15 @@ if ( is_singular( 'scene' ) ) {
         'url'  => get_post_type_archive_link( 'scene' ),
         'name' => 'Cenas',
     );
+    // Adicionar categoria principal no breadcrumb
+    $scene_cats = get_the_terms( get_the_ID(), 'scene_category' );
+    if ( ! empty( $scene_cats ) && ! is_wp_error( $scene_cats ) ) {
+        $primary_cat = $scene_cats[0];
+        $items[] = array(
+            'url'  => get_term_link( $primary_cat ),
+            'name' => $primary_cat->name,
+        );
+    }
     $items[] = array(
         'name' => get_the_title(),
     );

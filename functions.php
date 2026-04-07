@@ -99,6 +99,72 @@ function hotboys_pre_get_posts( $query ) {
 add_action( 'pre_get_posts', 'hotboys_pre_get_posts' );
 
 /**
+ * Customizar robots.txt
+ */
+function hotboys_robots_txt( $output, $public ) {
+    if ( '0' === $public ) {
+        return $output;
+    }
+
+    $output  = "User-agent: *\n";
+    $output .= "Disallow: /wp-admin/\n";
+    $output .= "Allow: /wp-admin/admin-ajax.php\n";
+    $output .= "Disallow: /wp-json/\n";
+    $output .= "Disallow: /?s=\n";
+    $output .= "Disallow: /search/\n\n";
+    $output .= "# Sitemaps\n";
+    $output .= "Sitemap: " . home_url( '/sitemap.xml' ) . "\n";
+    $output .= "Sitemap: " . home_url( '/sitemap.rss' ) . "\n";
+
+    return $output;
+}
+add_filter( 'robots_txt', 'hotboys_robots_txt', 10, 2 );
+
+/**
+ * Redirecionar URLs antigas do Elementor para novas rotas do tema
+ */
+function hotboys_redirects() {
+    if ( is_admin() ) {
+        return;
+    }
+
+    $redirects = array(
+        '/pagina-inicial/' => '/',
+        '/cenas-gratis/'   => '/cenas/',
+    );
+
+    $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+    $path = wp_parse_url( $request_uri, PHP_URL_PATH );
+
+    if ( $path && isset( $redirects[ $path ] ) ) {
+        wp_safe_redirect( home_url( $redirects[ $path ] ), 301 );
+        exit;
+    }
+}
+add_action( 'template_redirect', 'hotboys_redirects' );
+
+/**
+ * Remover tamanhos de imagem desnecessarios do WP
+ */
+function hotboys_remove_image_sizes() {
+    remove_image_size( 'medium_large' );
+    remove_image_size( '1536x1536' );
+    remove_image_size( '2048x2048' );
+}
+add_action( 'init', 'hotboys_remove_image_sizes' );
+
+/**
+ * Adicionar atributos de performance aos scripts
+ */
+function hotboys_script_loader_tag( $tag, $handle, $src ) {
+    if ( 'hotboys-script' === $handle ) {
+        return str_replace( ' src', ' defer src', $tag );
+    }
+    return $tag;
+}
+add_filter( 'script_loader_tag', 'hotboys_script_loader_tag', 10, 3 );
+
+/**
  * Desabilitar tamanhos de imagem desnecessarios do WP
  */
 function hotboys_disable_extra_image_sizes() {

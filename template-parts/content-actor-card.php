@@ -12,10 +12,13 @@ $scene_count = hotboys_get_actor_scene_count( get_the_ID() );
     <a href="<?php the_permalink(); ?>" class="actor-card__link" title="<?php the_title_attribute(); ?>">
         <div class="actor-card__photo">
             <?php if ( has_post_thumbnail() ) : ?>
-                <?php the_post_thumbnail( 'actor-thumb', array(
-                    'class'   => 'actor-card__img',
-                    'loading' => 'lazy',
-                    'alt'     => get_the_title(),
+                <?php echo wp_get_attachment_image( get_post_thumbnail_id(), 'actor-thumb', false, array(
+                    'class'    => 'actor-card__img',
+                    'loading'  => 'lazy',
+                    'alt'      => get_the_title(),
+                    'width'    => 300,
+                    'height'   => 400,
+                    'decoding' => 'async',
                 ) ); ?>
             <?php else : ?>
                 <div class="actor-card__placeholder" aria-hidden="true"></div>

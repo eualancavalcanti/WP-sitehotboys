@@ -14,11 +14,14 @@ $release_date = get_post_meta( get_the_ID(), '_scene_release_date', true );
     <a href="<?php the_permalink(); ?>" class="scene-card__link" title="<?php the_title_attribute(); ?>">
         <div class="scene-card__thumb">
             <?php if ( has_post_thumbnail() ) : ?>
-                <?php the_post_thumbnail( 'scene-thumb', array(
-                    'class'   => 'scene-card__img',
-                    'loading' => 'lazy',
-                    'alt'     => get_the_title(),
+                <?php echo wp_get_attachment_image( get_post_thumbnail_id(), 'scene-thumb', false, array(
+                    'class'    => 'scene-card__img',
+                    'loading'  => 'lazy',
+                    'alt'      => get_the_title(),
                     'itemprop' => 'thumbnailUrl',
+                    'width'    => 400,
+                    'height'   => 225,
+                    'decoding' => 'async',
                 ) ); ?>
             <?php else : ?>
                 <div class="scene-card__placeholder" aria-hidden="true"></div>

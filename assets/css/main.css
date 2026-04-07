@@ -1227,3 +1227,63 @@ ul, ol {
 .alignwide {
     max-width: var(--container-max);
 }
+
+/* ---------- FAQ Section ---------- */
+.section-faq {
+    background: var(--color-bg-alt);
+}
+
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--color-border);
+    padding: 0;
+}
+
+.faq-item__question {
+    display: block;
+    padding: 1.25rem 0;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text-light);
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-right: 2rem;
+}
+
+.faq-item__question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item__question::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 1.25rem;
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    transition: transform 0.2s;
+}
+
+.faq-item[open] .faq-item__question::after {
+    content: '−';
+}
+
+.faq-item__answer {
+    padding: 0 0 1.25rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+.faq-item__answer a {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+.faq-item__answer a:hover {
+    color: var(--color-accent-hover);
+}

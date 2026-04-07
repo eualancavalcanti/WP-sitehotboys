@@ -1,6 +1,6 @@
 <?php
 /**
- * SEO Helpers - Open Graph, Twitter Cards, Canonical, Meta Descriptions
+ * SEO Helpers - Open Graph, Twitter Cards, Canonical, Meta Descriptions, Robots
  *
  * @package HotBoys
  */
@@ -10,11 +10,119 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Verificar se plugin de SEO esta ativo (Yoast ou RankMath)
+ * Verificar se plugin de SEO esta ativo (Yoast, RankMath ou AIOSEO)
  */
 function hotboys_seo_plugin_active() {
-    return defined( 'WPSEO_VERSION' ) || class_exists( 'RankMath' );
+    return defined( 'WPSEO_VERSION' ) || class_exists( 'RankMath' ) || defined( 'AIOSEO_VERSION' );
 }
+
+/**
+ * Meta robots tags — controla indexacao por tipo de pagina
+ */
+function hotboys_meta_robots() {
+    if ( hotboys_seo_plugin_active() ) {
+        return;
+    }
+
+    $robots = array();
+
+    if ( is_404() ) {
+        $robots[] = 'noindex';
+        $robots[] = 'follow';
+    } elseif ( is_search() ) {
+        $robots[] = 'noindex';
+        $robots[] = 'follow';
+    } elseif ( is_singular( 'scene' ) || is_singular( 'actor' ) ) {
+        $robots[] = 'index';
+        $robots[] = 'follow';
+        $robots[] = 'max-image-preview:large';
+        $robots[] = 'max-snippet:-1';
+        $robots[] = 'max-video-preview:-1';
+    } elseif ( is_post_type_archive( 'scene' ) || is_post_type_archive( 'actor' ) ) {
+        $robots[] = 'index';
+        $robots[] = 'follow';
+        $robots[] = 'max-image-preview:large';
+    } elseif ( is_tax( 'scene_category' ) || is_tax( 'scene_tag' ) ) {
+        $term = get_queried_object();
+        if ( $term && $term->count > 0 ) {
+            $robots[] = 'index';
+            $robots[] = 'follow';
+            $robots[] = 'max-image-preview:large';
+        } else {
+            $robots[] = 'noindex';
+            $robots[] = 'follow';
+        }
+    } elseif ( is_front_page() ) {
+        $robots[] = 'index';
+        $robots[] = 'follow';
+        $robots[] = 'max-image-preview:large';
+        $robots[] = 'max-snippet:-1';
+        $robots[] = 'max-video-preview:-1';
+    } elseif ( is_page() ) {
+        $robots[] = 'index';
+        $robots[] = 'follow';
+    } else {
+        $robots[] = 'index';
+        $robots[] = 'follow';
+    }
+
+    if ( ! empty( $robots ) ) {
+        printf( '<meta name="robots" content="%s">' . "\n", esc_attr( implode( ', ', $robots ) ) );
+    }
+}
+add_action( 'wp_head', 'hotboys_meta_robots', 1 );
+
+/**
+ * Customiza title tag por tipo de pagina
+ */
+function hotboys_document_title_parts( $title ) {
+    if ( hotboys_seo_plugin_active() ) {
+        return $title;
+    }
+
+    $site_name = get_bloginfo( 'name' );
+
+    if ( is_singular( 'scene' ) ) {
+        $quality = get_post_meta( get_the_ID(), '_scene_quality', true );
+        $suffix = $quality ? " {$quality}" : '';
+        $title['title'] = get_the_title() . $suffix . ' | Cena Exclusiva';
+        $title['site'] = $site_name;
+    } elseif ( is_singular( 'actor' ) ) {
+        $title['title'] = get_the_title() . ' - Perfil e Filmografia';
+        $title['site'] = $site_name;
+    } elseif ( is_post_type_archive( 'scene' ) ) {
+        $paged = get_query_var( 'paged' );
+        $title['title'] = 'Catálogo de Cenas Exclusivas';
+        if ( $paged > 1 ) {
+            $title['title'] .= " - Página {$paged}";
+        }
+        $title['site'] = $site_name;
+    } elseif ( is_post_type_archive( 'actor' ) ) {
+        $paged = get_query_var( 'paged' );
+        $title['title'] = 'Atores Exclusivos';
+        if ( $paged > 1 ) {
+            $title['title'] .= " - Página {$paged}";
+        }
+        $title['site'] = $site_name;
+    } elseif ( is_tax( 'scene_category' ) ) {
+        $term = get_queried_object();
+        $title['title'] = $term->name . ' - Cenas Exclusivas';
+        $title['site'] = $site_name;
+    } elseif ( is_tax( 'scene_tag' ) ) {
+        $term = get_queried_object();
+        $title['title'] = $term->name . ' - Vídeos';
+        $title['site'] = $site_name;
+    } elseif ( is_front_page() ) {
+        $custom_title = get_theme_mod( 'hotboys_seo_title', '' );
+        if ( $custom_title ) {
+            $title['title'] = $custom_title;
+        }
+    }
+
+    return $title;
+}
+add_filter( 'document_title_parts', 'hotboys_document_title_parts' );
+add_filter( 'document_title_separator', function() { return '|'; } );
 
 /**
  * Open Graph + Twitter Card meta tags
@@ -56,7 +164,14 @@ function hotboys_og_tags() {
         $og['og:url']         = get_permalink();
 
         if ( has_post_thumbnail() ) {
+            $thumb_id = get_post_thumbnail_id();
             $og['og:image'] = get_the_post_thumbnail_url( get_the_ID(), 'scene-large' );
+            $image_meta = wp_get_attachment_metadata( $thumb_id );
+            if ( $image_meta ) {
+                $og['og:image:width']  = 800;
+                $og['og:image:height'] = 450;
+            }
+            $og['og:image:type'] = get_post_mime_type( $thumb_id );
         }
 
         $duration = get_post_meta( get_the_ID(), '_scene_duration', true );
@@ -69,12 +184,16 @@ function hotboys_og_tags() {
 
     } elseif ( is_singular( 'actor' ) ) {
         $og['og:type']        = 'profile';
-        $og['og:title']       = get_the_title() . ' - Ator HotBoys';
+        $og['og:title']       = get_the_title() . ' - Perfil e Filmografia | HotBoys';
         $og['og:description'] = hotboys_generate_meta_description();
         $og['og:url']         = get_permalink();
 
         if ( has_post_thumbnail() ) {
+            $thumb_id = get_post_thumbnail_id();
             $og['og:image'] = get_the_post_thumbnail_url( get_the_ID(), 'actor-large' );
+            $og['og:image:width']  = 600;
+            $og['og:image:height'] = 800;
+            $og['og:image:type'] = get_post_mime_type( $thumb_id );
         }
 
         $og['profile:username'] = sanitize_title( get_the_title() );
@@ -195,18 +314,24 @@ function hotboys_generate_meta_description() {
         $title    = get_the_title();
         $actors   = hotboys_get_actor_names();
         $duration = get_post_meta( get_the_ID(), '_scene_duration', true );
+        $quality  = get_post_meta( get_the_ID(), '_scene_quality', true );
         $excerpt  = get_the_excerpt();
+        $categories = get_the_terms( get_the_ID(), 'scene_category' );
 
         $desc = sprintf( 'Assista %s', $title );
+        if ( $quality ) {
+            $desc .= sprintf( ' em %s', $quality );
+        }
         if ( $actors ) {
             $desc .= sprintf( ' com %s', $actors );
         }
-        $desc .= '.';
-        if ( $excerpt ) {
-            $desc .= ' ' . wp_trim_words( $excerpt, 15, '...' );
-        }
+        $desc .= ' - cena exclusiva HotBoys.';
         if ( $duration ) {
-            $desc .= sprintf( ' Duração: %s.', $duration );
+            $desc .= sprintf( ' %s min.', $duration );
+        }
+        if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) {
+            $cat_names = wp_list_pluck( array_slice( $categories, 0, 3 ), 'name' );
+            $desc .= ' ' . implode( ', ', $cat_names ) . '.';
         }
 
         return mb_substr( $desc, 0, 160 );
@@ -216,12 +341,16 @@ function hotboys_generate_meta_description() {
         $name        = get_the_title();
         $scene_count = hotboys_get_actor_scene_count();
         $bio         = get_the_excerpt();
+        $city        = get_post_meta( get_the_ID(), '_actor_city', true );
 
-        $desc = sprintf( '%s - Ator HotBoys.', $name );
-        if ( $bio ) {
-            $desc .= ' ' . wp_trim_words( $bio, 15, '...' );
+        $desc = sprintf( '%s - Ator exclusivo HotBoys', $name );
+        if ( $city ) {
+            $desc .= sprintf( ' de %s', $city );
         }
-        $desc .= sprintf( ' %d cenas.', $scene_count );
+        $desc .= sprintf( '. %d cenas disponíveis.', $scene_count );
+        if ( $bio ) {
+            $desc .= ' ' . wp_trim_words( $bio, 12, '...' );
+        }
 
         return mb_substr( $desc, 0, 160 );
     }
@@ -231,19 +360,21 @@ function hotboys_generate_meta_description() {
         if ( $term->description ) {
             return mb_substr( $term->description, 0, 160 );
         }
+        $type_label = is_tax( 'scene_category' ) ? 'Cenas' : 'Vídeos';
         return sprintf(
-            'Cenas de %s no HotBoys. %d vídeos disponíveis.',
+            '%s de %s no HotBoys. %d vídeos exclusivos em alta qualidade para assistir agora.',
+            $type_label,
             $term->name,
             $term->count
         );
     }
 
     if ( is_post_type_archive( 'scene' ) ) {
-        return 'Explore nosso catálogo completo de cenas exclusivas HotBoys. Centenas de vídeos em alta qualidade.';
+        return 'Catálogo completo de cenas exclusivas HotBoys. Vídeos em HD e 4K com os melhores atores do Brasil. Atualizado diariamente.';
     }
 
     if ( is_post_type_archive( 'actor' ) ) {
-        return 'Conheça todos os atores exclusivos HotBoys. Perfis completos com filmografia.';
+        return 'Conheça todos os atores exclusivos HotBoys. Perfis completos com filmografia, fotos e redes sociais.';
     }
 
     if ( is_search() ) {
