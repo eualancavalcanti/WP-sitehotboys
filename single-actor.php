@@ -82,6 +82,16 @@ $scenes_query = hotboys_get_actor_scenes( get_the_ID(), $paged );
                         </a>
                     <?php endif; ?>
                 </div>
+
+                <!-- CTA inline no perfil do ator -->
+                <div class="actor-profile-cta">
+                    <span class="actor-profile-cta__icon">🔥</span>
+                    <div class="actor-profile-cta__content">
+                        <strong>Assista todas as cenas de <?php the_title(); ?></strong>
+                        <span>Acesso ilimitado ao catálogo completo — teste por R$ 1,00</span>
+                    </div>
+                    <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="btn btn-accent btn-small">Assinar</a>
+                </div>
             </div>
         </div>
 
@@ -96,6 +106,14 @@ $scenes_query = hotboys_get_actor_scenes( get_the_ID(), $paged );
                 </div>
 
                 <?php hotboys_pagination( $scenes_query ); ?>
+
+                <!-- CTA pós-filmografia -->
+                <div class="filmography-cta">
+                    <div class="filmography-cta__inner">
+                        <p class="filmography-cta__text">🎬 Assista a <strong>filmografia completa</strong> de <?php the_title(); ?> e <strong>+5.000 atores</strong> no HotBoys</p>
+                        <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="btn btn-accent">Assinar por R$ 1,00</a>
+                    </div>
+                </div>
             </section>
         <?php endif; ?>
     </div>

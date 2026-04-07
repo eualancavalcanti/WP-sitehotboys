@@ -103,4 +103,62 @@
             overlay.remove();
         });
     }
+
+    // ---- Floating Action Button (FAB) — scene & actor pages ----
+    var isSingleScene = document.querySelector('.single-scene');
+    var isSingleActor = document.querySelector('.single-actor');
+    var isArchive = document.querySelector('.archive-header');
+
+    if (isSingleScene || isSingleActor || isArchive) {
+        var fab = document.createElement('div');
+        fab.className = 'fab-cta';
+        fab.id = 'fabCta';
+        fab.innerHTML = '<a href="https://hotboys.com.br" target="_blank" rel="noopener" class="fab-cta__link">🔥 Assinar</a>';
+        document.body.appendChild(fab);
+
+        var fabThreshold = 300;
+        var ticking = false;
+
+        function updateFab() {
+            if (window.scrollY > fabThreshold) {
+                fab.classList.add('is-visible');
+            } else {
+                fab.classList.remove('is-visible');
+            }
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', function () {
+            if (!ticking) {
+                requestAnimationFrame(updateFab);
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    // ---- Sticky Bottom CTA (scene pages) — show after scrolling past main CTA ----
+    var stickyCta = document.getElementById('stickyCta');
+    var sceneMidCta = document.getElementById('sceneMidCta');
+
+    if (stickyCta && sceneMidCta) {
+        var stickyObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    stickyCta.classList.remove('is-visible');
+                    stickyCta.setAttribute('aria-hidden', 'true');
+                    document.body.classList.remove('sticky-active');
+                } else {
+                    // Only show if we've scrolled past (below the element)
+                    var rect = sceneMidCta.getBoundingClientRect();
+                    if (rect.bottom < 0) {
+                        stickyCta.classList.add('is-visible');
+                        stickyCta.setAttribute('aria-hidden', 'false');
+                        document.body.classList.add('sticky-active');
+                    }
+                }
+            });
+        }, { threshold: 0 });
+
+        stickyObserver.observe(sceneMidCta);
+    }
 })();

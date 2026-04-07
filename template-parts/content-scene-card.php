@@ -36,6 +36,11 @@ $release_date = get_post_meta( get_the_ID(), '_scene_release_date', true );
             <?php if ( $quality ) : ?>
                 <span class="scene-card__quality"><?php echo esc_html( $quality ); ?></span>
             <?php endif; ?>
+
+            <span class="scene-card__play" aria-hidden="true">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#fff" stroke-width="2" opacity=".85"/><polygon points="20,16 34,24 20,32" fill="#fff"/></svg>
+            </span>
+            <span class="scene-card__overlay"></span>
         </div>
 
         <div class="scene-card__info">

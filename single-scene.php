@@ -54,22 +54,40 @@ $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
                         <iframe src="<?php echo esc_url( $trailer_url ); ?>" allowfullscreen loading="lazy" title="Trailer - <?php the_title_attribute(); ?>"></iframe>
                     </div>
                 <?php elseif ( has_post_thumbnail() ) : ?>
-                    <div class="scene-thumbnail">
+                    <div class="scene-thumbnail scene-thumbnail--cta">
                         <?php the_post_thumbnail( 'scene-large', array(
                             'class'    => 'single-scene__img',
                             'alt'      => get_the_title(),
                             'itemprop' => 'thumbnailUrl',
                         ) ); ?>
-                    </div>
-                <?php endif; ?>
-
-                <?php if ( $external_url ) : ?>
-                    <div class="scene-cta">
-                        <a href="<?php echo esc_url( $external_url ); ?>" class="btn btn-primary btn-large" target="_blank" rel="nofollow noopener">
-                            Assistir Completo
+                        <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="scene-thumbnail__play" aria-label="Assistir cena completa">
+                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="38" stroke="#fff" stroke-width="3" opacity=".9"/><polygon points="33,24 58,40 33,56" fill="#fff"/></svg>
+                            <span class="scene-thumbnail__label">Assistir</span>
                         </a>
                     </div>
                 <?php endif; ?>
+
+                <!-- CTA Principal — sempre visível -->
+                <div class="scene-cta-block">
+                    <div class="scene-cta-block__inner">
+                        <div class="scene-cta-block__text">
+                            <span class="scene-cta-block__fire">🔥</span>
+                            <div>
+                                <strong class="scene-cta-block__title">Assista essa cena completa</strong>
+                                <p class="scene-cta-block__sub">Acesso ilimitado a todo o catálogo HotBoys</p>
+                            </div>
+                        </div>
+                        <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="btn btn-accent btn-large scene-cta-block__btn">
+                            ▶ Assistir Agora
+                        </a>
+                    </div>
+                    <div class="scene-cta-block__badges">
+                        <span class="cta-badge">✓ Qualidade HD/4K</span>
+                        <span class="cta-badge">✓ Conteúdo Exclusivo</span>
+                        <span class="cta-badge">✓ Cancele quando quiser</span>
+                        <span class="cta-badge cta-badge--price">Teste por R$ 1,00</span>
+                    </div>
+                </div>
             </div>
 
             <div class="single-scene__details">
@@ -134,6 +152,28 @@ $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
         </div>
 
         <?php
+        // Mid-Page CTA — converter quem scrollou até aqui
+        $actor_names_cta = hotboys_get_actor_names();
+        ?>
+        <section class="scene-midcta" id="sceneMidCta">
+            <div class="scene-midcta__inner">
+                <div class="scene-midcta__icon">🎬</div>
+                <h2 class="scene-midcta__title">
+                    <?php if ( $actor_names_cta ) : ?>
+                        Quer mais de <?php echo esc_html( $actor_names_cta ); ?>?
+                    <?php else : ?>
+                        Gostou dessa cena?
+                    <?php endif; ?>
+                </h2>
+                <p class="scene-midcta__text">Assine o HotBoys e tenha acesso ilimitado a <strong>+600 cenas exclusivas</strong> em qualidade HD e 4K.</p>
+                <div class="scene-midcta__actions">
+                    <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="btn btn-accent btn-large">Assinar por R$ 1,00</a>
+                    <span class="scene-midcta__trial">Teste sem compromisso — cancele quando quiser</span>
+                </div>
+            </div>
+        </section>
+
+        <?php
         // Cenas relacionadas
         $related = hotboys_get_related_scenes( get_the_ID(), 4 );
         if ( ! empty( $related ) ) :
@@ -147,6 +187,13 @@ $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
                 </div>
             </section>
         <?php endif; ?>
+
+        <!-- Sticky Bottom CTA (mobile) -->
+        <div class="sticky-cta" id="stickyCta" aria-hidden="true">
+            <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="sticky-cta__btn">
+                ▶ Assistir Agora <span class="sticky-cta__price">R$ 1,00</span>
+            </a>
+        </div>
     </div>
 </article>
 
