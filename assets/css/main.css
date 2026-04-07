@@ -2480,3 +2480,121 @@ body.sticky-active .fab-cta {
         right: 2rem;
     }
 }
+
+/* ---------- Actor Stats Badges ---------- */
+.actor-stats {
+    display: flex;
+    gap: .75rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.actor-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .75rem 1.25rem;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    min-width: 80px;
+}
+
+.actor-stat__number {
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    color: var(--color-accent);
+    line-height: 1.2;
+}
+
+.actor-stat__label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.single-actor__photo-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.single-actor__photo {
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+/* ---------- Actor No-Scenes CTA ---------- */
+.actor-no-scenes-cta {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: linear-gradient(180deg, var(--color-bg-alt) 0%, rgba(255,68,68,.05) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+}
+
+.actor-no-scenes-cta__icon {
+    font-size: 3rem;
+    margin-bottom: .75rem;
+}
+
+.actor-no-scenes-cta__title {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-light);
+    margin-bottom: .5rem;
+}
+
+.actor-no-scenes-cta__text {
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.actor-card__placeholder--large {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(135deg, var(--color-card) 0%, var(--color-border) 100%);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: var(--color-text-muted);
+}
+
+.actor-card__placeholder--large::after {
+    content: "👤";
+}
+
+@media (max-width: 767px) {
+    .single-actor__photo-wrapper {
+        align-items: center;
+    }
+
+    .single-actor__photo {
+        max-width: 280px;
+        width: 100%;
+    }
+
+    .actor-stats {
+        justify-content: center;
+    }
+
+    .actor-no-scenes-cta {
+        padding: 2rem 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .single-actor__photo {
+        max-width: 280px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .single-actor__photo {
+        max-width: 320px;
+    }
+}

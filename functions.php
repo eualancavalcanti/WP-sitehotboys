@@ -62,6 +62,7 @@ require_once HOTBOYS_DIR . '/inc/customizer.php';
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
     require_once HOTBOYS_DIR . '/inc/import-hotboys.php';
     require_once HOTBOYS_DIR . '/inc/scrape-hotboys.php';
+    require_once HOTBOYS_DIR . '/inc/health-check.php';
 }
 
 /**

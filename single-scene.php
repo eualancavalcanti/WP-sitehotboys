@@ -15,6 +15,8 @@ $release_date  = get_post_meta( get_the_ID(), '_scene_release_date', true );
 $external_url  = get_post_meta( get_the_ID(), '_scene_external_url', true );
 $trailer_url   = get_post_meta( get_the_ID(), '_scene_trailer_url', true );
 $quality       = get_post_meta( get_the_ID(), '_scene_quality', true );
+$source_url    = get_post_meta( get_the_ID(), '_hotboys_source_url', true );
+$scene_cta_url = $source_url ? $source_url : 'https://hotboys.com.br';
 $actors        = hotboys_get_scene_actors();
 $categories    = get_the_terms( get_the_ID(), 'scene_category' );
 $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
@@ -60,7 +62,7 @@ $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
                             'alt'      => get_the_title(),
                             'itemprop' => 'thumbnailUrl',
                         ) ); ?>
-                        <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="scene-thumbnail__play" aria-label="Assistir cena completa">
+                        <a href="<?php echo esc_url( $scene_cta_url ); ?>" target="_blank" rel="noopener" class="scene-thumbnail__play" aria-label="Assistir cena completa">
                             <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="38" stroke="#fff" stroke-width="3" opacity=".9"/><polygon points="33,24 58,40 33,56" fill="#fff"/></svg>
                             <span class="scene-thumbnail__label">Assistir</span>
                         </a>
@@ -77,7 +79,7 @@ $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
                                 <p class="scene-cta-block__sub">Acesso ilimitado a todo o catálogo HotBoys</p>
                             </div>
                         </div>
-                        <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="btn btn-accent btn-large scene-cta-block__btn">
+                        <a href="<?php echo esc_url( $scene_cta_url ); ?>" target="_blank" rel="noopener" class="btn btn-accent btn-large scene-cta-block__btn">
                             ▶ Assistir Agora
                         </a>
                     </div>
@@ -167,7 +169,7 @@ $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
                 </h2>
                 <p class="scene-midcta__text">Assine o HotBoys e tenha acesso ilimitado a <strong>+600 cenas exclusivas</strong> em qualidade HD e 4K.</p>
                 <div class="scene-midcta__actions">
-                    <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="btn btn-accent btn-large">Assinar por R$ 1,00</a>
+                    <a href="<?php echo esc_url( $scene_cta_url ); ?>" target="_blank" rel="noopener" class="btn btn-accent btn-large">Assistir Agora</a>
                     <span class="scene-midcta__trial">Teste sem compromisso — cancele quando quiser</span>
                 </div>
             </div>
@@ -190,7 +192,7 @@ $tags          = get_the_terms( get_the_ID(), 'scene_tag' );
 
         <!-- Sticky Bottom CTA (mobile) -->
         <div class="sticky-cta" id="stickyCta" aria-hidden="true">
-            <a href="https://hotboys.com.br" target="_blank" rel="noopener" class="sticky-cta__btn">
+            <a href="<?php echo esc_url( $scene_cta_url ); ?>" target="_blank" rel="noopener" class="sticky-cta__btn">
                 ▶ Assistir Agora <span class="sticky-cta__price">R$ 1,00</span>
             </a>
         </div>
