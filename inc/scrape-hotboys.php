@@ -764,11 +764,17 @@ class HotBoys_Scrape_Command {
         require_once ABSPATH . 'wp-admin/includes/image.php';
 
         // Override SSL verify for download_url.
-        add_filter( 'http_request_args', array( $this, 'disable_ssl_verify' ), 10, 2 );
+        $ssl_filter = function( $args, $req_url ) {
+            if ( strpos( $req_url, 'hotboys.com.br' ) !== false ) {
+                $args['sslverify'] = false;
+            }
+            return $args;
+        };
+        add_filter( 'http_request_args', $ssl_filter, 10, 2 );
 
         $tmp = download_url( $url, 30 );
 
-        remove_filter( 'http_request_args', array( $this, 'disable_ssl_verify' ), 10 );
+        remove_filter( 'http_request_args', $ssl_filter, 10 );
 
         if ( is_wp_error( $tmp ) ) {
             WP_CLI::warning( "Erro ao baixar imagem {$url}: " . $tmp->get_error_message() );
@@ -791,19 +797,7 @@ class HotBoys_Scrape_Command {
         set_post_thumbnail( $post_id, $attachment_id );
     }
 
-    /**
-     * Disable SSL verification for image downloads from hotboys servers.
-     *
-     * @param array  $args HTTP request args.
-     * @param string $url  Request URL.
-     * @return array Modified args.
-     */
-    public function disable_ssl_verify( $args, $url ) {
-        if ( strpos( $url, 'hotboys.com.br' ) !== false ) {
-            $args['sslverify'] = false;
-        }
-        return $args;
-    }
+
 }
 
 WP_CLI::add_command( 'hotboys-scrape', 'HotBoys_Scrape_Command' );
